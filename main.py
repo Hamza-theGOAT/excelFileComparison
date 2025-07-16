@@ -18,6 +18,7 @@ def fetchExcel(path: str, wbOld: str, wbNew: str):
         'dfOld': dfOld,
         'dfNew': dfNew
     }
+    return dp
 
 
 def comparison(dp: dict):
@@ -29,6 +30,11 @@ def comparison(dp: dict):
     common = dfNew[dfNew.index.isin(dfOld.index)]
     changes = (common != dfOld.loc[common.index])
 
+    print(f"Newly added Data:\n{added}")
+    print(f"Removed Data:\n{removed}")
+    print(f"Common Data:\n{common}")
+    print(f"Changes in Data:\n{changes}")
+
 
 def main():
     with open('variables.json', 'r') as j:
@@ -37,6 +43,7 @@ def main():
     wbOld = data['oldFile']
     wbNew = data['newFile']
     dp = fetchExcel(path, wbOld, wbNew)
+    comparison(dp)
 
 
 if __name__ == "__main__":

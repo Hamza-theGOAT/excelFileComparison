@@ -1,5 +1,8 @@
 {
     "path": "source_dir",
     "oldFile": "OldWorkBook.xlsx",
-    "newFile": "NewWorkBook.xlsx"
+    "oldSheet": "Sheet1",
+    "newFile": "NewWorkBook.xlsx",
+    "newSheet": "Sheet1",
+    "col": "Name"
 }

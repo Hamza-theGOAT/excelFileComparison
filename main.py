@@ -6,14 +6,16 @@ import json
 from datetime import datetime as dt
 
 
-def fetchExcel(path: str, wbOld: str, wbNew: str):
+def fetchExcel(path: str, wbOld: str, wbNew: str, wsOld: str, wsNew: str):
     dfOld = pd.read_excel(
-        os.path.join(path, wbOld)
+        os.path.join(path, wbOld),
+        sheet_name=wsOld
     )
     print(f"Old Data Frame:\n{dfOld}")
 
     dfNew = pd.read_excel(
-        os.path.join(path, wbNew)
+        os.path.join(path, wbNew),
+        sheet_name=wsNew
     )
     print(f"New Data Frame:\n{dfNew}")
 
@@ -83,16 +85,28 @@ def orderedComparison(dp: dict, col: str):
 
 
 def main():
+    # Fetch data from JSON file
     with open('variables.json', 'r') as j:
         data = json.load(j)
+
+    # Create JSON variables
     path = data['path']
     wbOld = data['oldFile']
+    wsOld = data['oldSheet']
     wbNew = data['newFile']
-    dp = fetchExcel(path, wbOld, wbNew)
+    wsNew = data['newSheet']
+    col = data['col']
+
+    # Fetch Excel files to compare
+    dp = fetchExcel(path, wbOld, wbNew, wsOld, wsNew)
+
+    # Run comparison based on index
     print("Index Based Comparison")
     unorderedComparison(dp)
+
+    # Run comparison based on specific column
     print("Column Based Comparison")
-    orderedComparison(dp, 'Name')
+    orderedComparison(dp, col)
 
 
 if __name__ == "__main__":

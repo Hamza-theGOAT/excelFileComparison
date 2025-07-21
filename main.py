@@ -89,7 +89,10 @@ def main():
     wbOld = data['oldFile']
     wbNew = data['newFile']
     dp = fetchExcel(path, wbOld, wbNew)
+    print("Index Based Comparison")
     unorderedComparison(dp)
+    print("Column Based Comparison")
+    orderedComparison(dp, 'Name')
 
 
 if __name__ == "__main__":

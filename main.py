@@ -6,16 +6,24 @@ import json
 from datetime import datetime as dt
 
 
-def fetchExcel(path: str, wbOld: str, wbNew: str, wsOld: str, wsNew: str):
+def fetchJSON():
+    # Fetch data from JSON file
+    with open('variables.json', 'r') as j:
+        var = json.load(j)
+
+    return var
+
+
+def fetchExcel(var: dict):
     dfOld = pd.read_excel(
-        os.path.join(path, wbOld),
-        sheet_name=wsOld
+        os.path.join(var['path'], var['oldFile']),
+        sheet_name=var['oldSheet']
     )
     print(f"Old Data Frame:\n{dfOld}")
 
     dfNew = pd.read_excel(
-        os.path.join(path, wbNew),
-        sheet_name=wsNew
+        os.path.join(var['path'], var['newFile']),
+        sheet_name=var['newSheet']
     )
     print(f"New Data Frame:\n{dfNew}")
 
@@ -62,20 +70,11 @@ def comparison(dp: dict, col: str):
 
 
 def main():
-    # Fetch data from JSON file
-    with open('variables.json', 'r') as j:
-        data = json.load(j)
-
-    # Create JSON variables
-    path = data['path']
-    wbOld = data['oldFile']
-    wsOld = data['oldSheet']
-    wbNew = data['newFile']
-    wsNew = data['newSheet']
-    col = data['col']
+    # Fetch JSON file for variables
+    var = fetchJSON()
 
     # Fetch Excel files to compare
-    dp = fetchExcel(path, wbOld, wbNew, wsOld, wsNew)
+    dp = fetchExcel(var)
 
     # Run comparison based on index
     print("\nIndex Based Comparison")
@@ -84,7 +83,7 @@ def main():
 
     # Run comparison based on specific column
     print("\nColumn Based Comparison")
-    comparison(dp, col)
+    comparison(dp, var['col'])
     print("_"*100)
 
 

@@ -16,13 +16,13 @@ def fetchJSON():
 
 def fetchExcel(var: dict):
     dfOld = pd.read_excel(
-        os.path.join(var['path'], var['oldFile']),
+        os.path.join(var['src'], var['oldFile']),
         sheet_name=var['oldSheet']
     )
     print(f"\nOld Data Frame:\n{dfOld}")
 
     dfNew = pd.read_excel(
-        os.path.join(var['path'], var['newFile']),
+        os.path.join(var['src'], var['newFile']),
         sheet_name=var['newSheet']
     )
     print(f"\nNew Data Frame:\n{dfNew}")
@@ -68,6 +68,18 @@ def comparison(dp: dict, col: str):
     }
 
 
+def toExcel(data: dict, var: dict, ty: str):
+    if ty == 'index':
+        wbN = os.path.join(var['wrk'], var['outFile1'])
+    if ty == 'col':
+        wbN = os.path.join(var['wrk'], var['outFile2'])
+
+    with pd.ExcelWriter(wbN) as xlwriter:
+        for key, value in data.items():
+            if isinstance(value, pd.DataFrame):
+                value.to_excel(xlwriter, sheet_name=key, index=False)
+
+
 def main():
     # Fetch JSON file for variables
     var = fetchJSON()
@@ -79,12 +91,14 @@ def main():
 
     # Run comparison based on index
     print("Index Based Comparison")
-    comparison(dp, None)
+    data = comparison(dp, None)
+    toExcel(data, var, 'index')
     print("_"*100)
 
     # Run comparison based on specific column
     print("Column Based Comparison")
-    comparison(dp, var['col'])
+    data = comparison(dp, var['col'])
+    toExcel(data, var, 'col')
     print("_"*100)
 
 

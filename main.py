@@ -19,19 +19,18 @@ def fetchExcel(var: dict):
         os.path.join(var['path'], var['oldFile']),
         sheet_name=var['oldSheet']
     )
-    print(f"Old Data Frame:\n{dfOld}")
+    print(f"\nOld Data Frame:\n{dfOld}")
 
     dfNew = pd.read_excel(
         os.path.join(var['path'], var['newFile']),
         sheet_name=var['newSheet']
     )
-    print(f"New Data Frame:\n{dfNew}")
+    print(f"\nNew Data Frame:\n{dfNew}")
 
-    dp = {
+    return {
         'dfOld': dfOld,
         'dfNew': dfNew
     }
-    return dp
 
 
 def comparison(dp: dict, col: str):
@@ -74,15 +73,17 @@ def main():
     var = fetchJSON()
 
     # Fetch Excel files to compare
+    print("Excel Files for comparison")
     dp = fetchExcel(var)
+    print("_"*100)
 
     # Run comparison based on index
-    print("\nIndex Based Comparison")
+    print("Index Based Comparison")
     comparison(dp, None)
     print("_"*100)
 
     # Run comparison based on specific column
-    print("\nColumn Based Comparison")
+    print("Column Based Comparison")
     comparison(dp, var['col'])
     print("_"*100)
 

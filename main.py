@@ -1,9 +1,9 @@
 import pandas as pd
-import openpyxl as opxl
-import numpy as np
+from openpyxl import load_workbook as loadWB
 import os
 import json
 from datetime import datetime as dt
+from formatz import tableFormat
 
 
 def fetchJSON():
@@ -78,6 +78,10 @@ def toExcel(data: dict, var: dict, ty: str):
         for key, value in data.items():
             if isinstance(value, pd.DataFrame):
                 value.to_excel(xlwriter, sheet_name=key, index=False)
+
+    wb = loadWB(wbN)
+    tableFormat(wb)
+    wb.save(wbN)
 
 
 def main():
